@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="dictionary.js" defer></script>
+    <script src="targetWords.js" defer></script>
+    <script src="script.js" defer></script>
+    
+</head>
+<body data-dark-mode="enabled">
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span class="logo__letter logo__green">N</span>
+                <span class="logo__letter logo__green">O</span>
+                <span class="logo__letter logo__green">T</span>
+                <span class="logo__letter logo__yellow">W</span>
+                <span class="logo__letter logo__yellow">O</span>
+                <span class="logo__letter logo__yellow">R</span>
+                <span class="logo__letter logo__yellow">D</span>
+                <span class="logo__letter logo__yellow">L</span>
+                <span class="logo__letter logo__yellow">E</span>
+            </div>
+            
+            <button class="menu-toggle hover" aria-controls="primary-navigation" aria-expanded="false">
+                <svg fill="var(--button-color)" class="hamburger" viewBox="0 0 100 100" width="50px">
+
+                    <rect class="hamburger__line top " 
+                        width="80" height="10"
+                        x="10" y="25" rx="5">
+                    </rect>
+    
+                    <rect class="hamburger__line middle" 
+                        width="80" height="10"
+                        x="10" y="45" rx="5">
+                    </rect>
+    
+                    <rect class="hamburger__line bottom" 
+                        width="80" height="10"
+                        x="10" y="65" rx="5">
+                    </rect>
+                </svg>
+            </button>
+
+            <div class="menu" id="primary-navigation" data-visible="false">
+                
+                <button data-menu-button="0" class="menu-button hover" id="help-btn" aria-controls="modal-help">
+                    <img src="https://img.icons8.com/ios/50/null/help--v1.png"/>
+                    <span class="menu-button--text"> Help</span>
+                </button>
+                <button data-menu-button="1" class="menu-button hover" id="stats-btn" aria-controls="modal-stats">
+                    <img src="https://img.icons8.com/windows/32/null/bar-chart.png"/>
+                    <span class="menu-button--text">Stats</span>
+                </button>
+                <button data-menu-button="2" class="menu-button hover" id="config-btn"aria-controls="modal-config">
+                    <img src="https://img.icons8.com/ios-filled/50/null/settings.png"/>
+                    <span class="menu-button--text">Config</span>
+                </button>
+
+                <button data-give-up class="menu-button give-up hover">Surrender</button>
+            </div>
+            
+        </header>
+        <div class="alert-container" data-alert-container>    
+        </div>
+        
+        <div class="game-container">
+
+        <div data-guess-grid class="game__rows" id="game__rows">
+            <!-- First Row -->
+            <div class="row">
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+            </div>
+            <!-- Second Row -->
+            <div class="row">
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+            </div>
+            <!-- Third Row -->
+            <div class="row">
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+            </div>
+            <!-- Fourth Row -->
+            <div class="row">
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+            </div>
+            <!-- Fifth Row -->
+            <div class="row">
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+            </div>
+            <!-- Sixth Row -->
+            <div class="row">
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+                <div class="tile" data-state=""></div>
+            </div>
+        </div>
+            
+        <div data-keyboard class="keyboard">
+                <div class="keyboard-row">
+                <button class="key hover" data-key="q">Q</button>
+                <button class="key hover" data-key="w">W</button>
+                <button class="key hover" data-key="e">E</button>
+                <button class="key hover" data-key="r">R</button>
+                <button class="key hover" data-key="t">T</button>
+                <button class="key hover" data-key="y">Y</button>
+                <button class="key hover" data-key="u">U</button>
+                <button class="key hover" data-key="i">I</button>
+                <button class="key hover" data-key="o">O</button>
+                <button class="key hover" data-key="p">P</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key hover" data-key="a">A</button>
+                <button class="key hover" data-key="s">S</button>
+                <button class="key hover" data-key="d">D</button>
+                <button class="key hover" data-key="f">F</button>
+                <button class="key hover" data-key="g">G</button>
+                <button class="key hover" data-key="h">H</button>
+                <button class="key hover" data-key="j">J</button>
+                <button class="key hover" data-key="k">K</button>
+                <button class="key hover" data-key="l">L</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key large-key hover" data-delete ><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" class="game-icon" data-testid="icon-backspace"><path fill="currentColor" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
+                <button class="key hover" data-key="z">Z</button>
+                <button class="key hover" data-key="x">X</button>
+                <button class="key hover" data-key="c">C</button>
+                <button class="key hover" data-key="v">V</button>
+                <button class="key hover" data-key="b">B</button>
+                <button class="key hover" data-key="n">N</button>
+                <button class="key hover" data-key="m">M</button>
+                <button class="key hover large-key" data-enter >Enter</button>
+
+            </div>
+        </div>
+            
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>Código por <a href="#" class="footer-link"> Guilherme Augusto</a></p>
+        <p>Ícones por <a href="#" class="footer-link">Icons8</a></p>
+
+        
+    </footer>
+
+    <!-- help -->
+    <dialog data-modal class="modal" id="modal-help">
+        <div class="modal-content">
+            <button data-close-button='0' class="close-modal-btn hover">&times;</button>
+            <div class="modal-text">
+                <h2 class="modal-title">How to Play</h2>
+                <p>You have 6 tries to guess the word.</p>
+                <p>after each try you'll get a tip with colors</p>
+                <p>Exemple:</p>
+                <div class="exemple
+                "> <span class="help-exemple correct">P</span>
+                    <span class="help-exemple wrong">L</span>
+                    <span class="help-exemple wrong-position">A</span>
+                    <span class="help-exemple wrong">N</span>
+                    <span class="help-exemple wrong">E</span>
+                </div>
+                <p> If the letter is correct, it will turn <span class="green-text">Green</span></p>
+                <p>If the letter is elsewhere on the word, it will turn <span class="yellow-text">Yellow</span></p>
+                <p>If the letter isn't on the word, it will turn <span class="grey-text">Grey</span></p>
+                
+                <p>If you want to give up, just press  <button class="help-give-up">Surrender</button></p>
+
+
+            </div>
+        </div>
+              
+    </dialog>
+
+    <!-- stats -->
+    <dialog data-modal class="modal" id="modal-stats">
+        <button data-close-button='1' class="close-modal-btn hover">&times;</button>
+        <div class="modal-content">
+            <h2 class="modal-title">Stats</h2>
+            <div data-stats class="div-stats">
+                
+            </div>
+            <div data-stats class="div-stats">
+                
+            </div>
+            <div data-stats class="div-stats">
+                
+            </div>
+
+        </div>
+    </dialog>
+    <!-- config -->
+
+    <dialog  data-modal class="modal" id="modal-config">
+        <button data-close-button="2" class="close-modal-btn hover">&times;</button>
+        <div class="modal-content">
+            <h2 class="modal-title">Configs</h2>
+            <div class="config-div">
+                <div class="config-text">
+                    <h3>Dark Mode</h3>
+                    <p>Toggle dark mode on/off</p>
+                </div>
+                <button class="dark-mode-toggle" id="dark-mode-toggle" data-dark-mode="enabled"></button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Game Over -->
+    <dialog  data-modal class="modal game-over">
+        <div class="modal-content game-content">
+            <h2>Game Over</h2>
+            <div data-answer >The word was:</div>
+            <button data-restart class="restart hover">Restart</button>
+        </div>
+    </dialog>
+
+    <!-- You Win -->
+    <dialog data-modal  class="modal game-win">
+        <div class="modal-content game-content">
+            <h2>You Win!</h2>
+            <p>Congratulations</p>
+            <div data-tries>You found the secret word</div>
+            <button class="restart hover" data-restart>Play Again</button>
+        </div>
+    </dialog>
+</body>
+</html>
+
