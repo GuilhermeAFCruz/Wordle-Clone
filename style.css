@@ -304,6 +304,8 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    right: 8px;
 }
 
 .menu-toggle .hamburger__line{
