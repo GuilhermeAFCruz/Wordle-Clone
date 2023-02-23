@@ -57,6 +57,10 @@ body[data-dark-mode="disabled"] {
 .hover:active{
     filter: var(--button-active);
 }
+
+.bounce{
+    animation: bounce 100ms ease;
+}
 /* Data States */
 
 .tile[data-state='active'] { 
@@ -71,7 +75,7 @@ body[data-dark-mode="disabled"] {
     color: var(--active-text-color) !important;
 }
 
-.tile[data-state='wrong']{
+*[data-state='wrong'],.tile[data-state='wrong']{
     background: var(--clr-grey); 
     border: none;
     color: var(--active-text-color) !important;
@@ -116,6 +120,12 @@ body[data-dark-mode="disabled"] {
     80%{transform: translateY(2.5%);}
     90%{transform: translateY(-5%);}
     100%{transform: translateY(0)}
+}
+
+@keyframes bounce {
+    0% {transform: scale(1,1);}
+    50%{transform: scale(1.25,1.25);}
+    100%{transform: scale(1,1);}
 }
 
 /* General Styling */

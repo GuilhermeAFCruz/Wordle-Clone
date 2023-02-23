@@ -81,10 +81,14 @@ function handleKeyPress(e) {
 function pressKey(key) {
     const activeTiles = getActiveTiles()
     if (activeTiles.length >= WORD_LENGTH) return
-    const nextTile = guessGrid.querySelector('.tile:not([data-letter])') //seleciona o primeiro elemneto sem o data-letter
+    const nextTile = guessGrid.querySelector('.tile:not([data-letter])') //seleciona o primeiro elemento sem o data-letter
     nextTile.dataset.letter = key.toLowerCase()
     nextTile.textContent = key //adiciona o conteudo  na div
     nextTile.dataset.state = 'active'
+    nextTile.classList.add('bounce')
+    nextTile.addEventListener('animationend', () => {
+        nextTile.classList.remove('bounce')
+    })
 }
 
 function deleteKey() {
