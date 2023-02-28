@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wordle Clone</title>
     <link rel="stylesheet" href="style.css">
-    <script src="dictionary.js" defer></script>
-    <script src="targetWords.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="js/eng-dictionary.js" defer></script>
+    <script src="js/eng-targetWords.js" defer></script>
+    <script src="js/pt-dictionary.js" defer></script>
+    <script src="js/pt-targetWords.js" defer></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/languages.js" defer></script>
     
 </head>
 <body data-dark-mode="enabled">
@@ -48,9 +51,9 @@
 
             <div class="menu" id="primary-navigation" data-visible="false">
                 
-                <button data-menu-button="0" class="menu-button hover" id="help-btn" aria-controls="modal-help">
+                <button data-menu-button="0" class="menu-button hover" aria-controls="modal-help">
                     <img src="https://img.icons8.com/ios/50/null/help--v1.png"/>
-                    <span class="menu-button--text"> Help</span>
+                    <span data-text="help-btn" class="menu-button--text"> Help</span>
                 </button>
                 <button data-menu-button="1" class="menu-button hover" id="stats-btn" aria-controls="modal-stats">
                     <img src="https://img.icons8.com/windows/32/null/bar-chart.png"/>
@@ -61,7 +64,7 @@
                     <span class="menu-button--text">Config</span>
                 </button>
 
-                <button data-give-up class="menu-button give-up hover">Surrender</button>
+                <button data-text="give-up" data-give-up class="menu-button give-up hover">Surrender</button>
             </div>
             
         </header>
@@ -143,7 +146,8 @@
                     <button class="key hover" data-key="h">H</button>
                     <button class="key hover" data-key="j">J</button>
                     <button class="key hover" data-key="k">K</button>
-                    <button class="key hover" data-key="l">L</button>
+                    <button  class="key hover" data-key="l">L</button>
+                    <button class="key hover" data-key="ç">Ç</button>
                 </div>
                 <div class="keyboard-row">
                     <button class="key large-key hover" data-delete ><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" class="game-icon" data-testid="icon-backspace"><path fill="currentColor" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></svg></button>
@@ -174,25 +178,8 @@
     <dialog data-modal class="modal" id="modal-help">
         <div class="modal-content">
             <button data-close-button='0' class="close-modal-btn hover">&times;</button>
-            <div class="modal-text">
-                <h2 class="modal-title">How to Play</h2>
-                <p>You have 6 tries to guess the word.</p>
-                <p>after each try you'll get a tip with colors</p>
-                <p>Exemple:</p>
-                <div class="exemple
-                "> <span class="help-exemple correct">P</span>
-                    <span data-state="wrong" class="help-exemple">L</span>
-                    <span class="help-exemple wrong-position">A</span>
-                    <span data-state="wrong" class="help-exemple">N</span>
-                    <span data-state="wrong" class="help-exemple">E</span>
-                </div>
-                <p> If the letter is correct, it will turn <span class="green-text">Green</span></p>
-                <p>If the letter is elsewhere on the word, it will turn <span class="yellow-text">Yellow</span></p>
-                <p>If the letter isn't on the word, it will turn <span class="grey-text">Grey</span></p>
+            <div data-text="help" class="help-text">
                 
-                <p>If you want to give up, just press  <button class="help-give-up">Surrender</button></p>
-
-
             </div>
         </div>
               
@@ -222,31 +209,38 @@
         <div class="modal-content">
             <h2 class="modal-title">Configs</h2>
             <div class="config-div">
-                <div class="config-text">
+                <div data-config-text="dark-mode" class="config-text">
                     <h3>Dark Mode</h3>
                     <p>Toggle dark mode on/off</p>
                 </div>
-                <button class="dark-mode-toggle" id="dark-mode-toggle" data-dark-mode="enabled"></button>
+                <button class="toggle-button" id="dark-mode-toggle" data-dark-mode="enabled"></button>
+            </div>
+            
+            <div class="config-div">
+                <div data-config-text="language" class="config-text">
+                    <h3>sacc</h3>
+                    <p>accaaccasc</p>
+                </div>
+                <button class="toggle-button" id="language-toggle" data-function="enabled"></button>
             </div>
         </div>
     </dialog>
 
     <!-- Game Over -->
     <dialog  data-modal class="modal game-over">
-        <div class="modal-content game-content">
-            <h2>Game Over</h2>
-            <div data-answer >The word was:</div>
-            <button data-restart class="restart hover">Restart</button>
+        <div  class="modal-content win-loss-content">
+            <h2 data-text="game-over"></h2>
+            <div data-answer ></div>
+            <button data-restart class="restart hover"></button>
         </div>
     </dialog>
 
     <!-- You Win -->
     <dialog data-modal  class="modal game-win">
-        <div class="modal-content game-content">
-            <h2>You Win!</h2>
-            <p>Congratulations</p>
-            <div data-tries>You found the secret word</div>
-            <button class="restart hover" data-restart>Play Again</button>
+        <div  class="modal-content win-loss-content">
+            <h2 data-text="game-win"></h2>
+            <div data-tries></div>
+            <button class="restart hover" data-restart></button>
         </div>
     </dialog>
 </body>

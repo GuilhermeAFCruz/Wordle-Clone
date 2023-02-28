@@ -1,4 +1,4 @@
-const dictionary = [
+const engDictionary = [
         "aahed",
         "aalii",
         "aargh",

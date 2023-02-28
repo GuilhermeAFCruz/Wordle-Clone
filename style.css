@@ -18,6 +18,7 @@
     --button-hover: brightness(120%);
     --button-active: brightness(150%);
     --menu-img-filter: invert(100%);
+    --toggle-bg: var(--bg-clr);
     --wrong-opacity: .4;
     --active-text-color: var(--text-color);
 }
@@ -35,6 +36,7 @@ body[data-dark-mode="disabled"] {
     --button-hover: brightness(90%);
     --button-active: brightness(70%);
     --menu-img-filter: invert(28%) sepia(12%) saturate(1022%) hue-rotate(183deg) brightness(91%) contrast(88%);
+    --toggle-bg: var(--key-clr);
     --wrong-opacity: 1;
     --active-text-color: white;
 }
@@ -60,6 +62,10 @@ body[data-dark-mode="disabled"] {
 
 .bounce{
     animation: bounce 100ms ease;
+}
+
+.btn-hidden {
+    display: none !important;  
 }
 /* Data States */
 
@@ -95,11 +101,13 @@ body[data-dark-mode="disabled"] {
 
 .wrong-position{
     background: var(--clr-yellow) !important;
+    opacity: 1 !important;
     color: var(--active-text-color) !important;
 }
 
 .correct{
     background: var(--clr-green)!important;
+    opacity: 1 !important;
     color: var(--active-text-color) !important;
 }
 
@@ -142,7 +150,7 @@ body{
 
 /* Game-Over */
 
-.game-content{
+.win-loss-content{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -530,7 +538,7 @@ body{
 
 /* Dark Mode */
 
-.dark-mode-toggle{
+.toggle-button{
     cursor: pointer;
     padding: 0;
     margin: 0;
@@ -539,11 +547,11 @@ body{
     border-radius: 100px;
     border: none;
     position: relative;
-    background: var(--bg-clr);
-    border: 2px solid var(--key-clr);
+    background: var(--toggle-bg);
+    border: 2px solid var(--clr-grey);
 }
 
-.dark-mode-toggle::after{
+.toggle-button::after{
     content: "";
     display: block;
     width: 20px;
@@ -559,15 +567,11 @@ body{
     transition: left 200ms ease-in-out;
 }
 
-.dark-mode-toggle[data-dark-mode='disabled']::after{
+.toggle-button[data-function='disabled']::after{
     left: 50%;
     right: 0;
 }
 
-.dark-mode-toggle[data-dark-mode='disabled'] {
-    background: var(--key-clr);
-    border-color: var(--clr-grey);
-}
 
 
 @media (min-width: 700px) {

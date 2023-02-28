@@ -1,3 +1,5 @@
+firstTimeStart()
+let language = localStorage.getItem('language')
 const guessGrid = document.querySelector('[data-guess-grid]')
 const alertContainer = document.querySelector('[data-alert-container]')
 const keyboard = document.querySelector('[data-keyboard]')
@@ -6,24 +8,42 @@ const WORD_LENGTH = 5
 const FLIP_ANIMATION_DURATION = 500
 const DANCE_ANIMATION_DURATION = 500
 let numberOfTries = 0
-let temp = ""
+let dictionary = setDictionary(language)
+let targetWords = setTargetWords(language)
 // encontra um apalavra aleatória
 const randomIndex = Math.floor(Math.random() * targetWords.length) //seleciona um index aleatório
 const randomWord = targetWords[randomIndex] //seleciona uma palavra na lista usando o index
 const targetWord = randomWord
 
-statsStart()
-
+console.log(targetWord);
+// seleciona os stats do local storage
 let numberOfGames = parseInt(localStorage.getItem('numberOfGames'))
 let numberOfVictories = parseInt(localStorage.getItem('numberOfVictories'))
 let numberOfFails = parseInt(localStorage.getItem('numberOfFails'))
 
 startInteraction()
-showAlert('Can you guess the word?', duration = 1500)
-localStorage.setItem('numberOfGames', (numberOfGames + 1).toString())
+
+// determina o dicionario a ser usado
+function setDictionary(language) {
+    if (language == 'pt-br') {
+        return ptDictionary
+        
+        
+    } else {
+        return engDictionary 
+    }
+}
+// determina a lista de palavras alvo a ser usada
+function setTargetWords(language) {
+    if (language == 'pt-br') {
+        return ptTargetWords    
+    } else {
+           return engTargetWords
+    }
+}
 
 // Checa se é a primeira vez jogando e atribui as variáveis numéricas
-function statsStart() {
+function firstTimeStart() {
   let firstTime = parseInt(localStorage.getItem('numberOfGames'))
   if(isNaN(firstTime)) {
     localStorage.setItem('numberOfGames', '0')
@@ -31,6 +51,11 @@ function statsStart() {
     localStorage.setItem('numberOfFails', '0')
     
   } 
+  let language = localStorage.getItem('language')
+  if(language == null){
+    localStorage.setItem('language', 'pt-br')
+}
+
 }
 //   começa a interação com o usuário
 function startInteraction() {
@@ -77,7 +102,7 @@ function handleKeyPress(e) {
         return
     }
 }
-
+// imprime a letra na tela
 function pressKey(key) {
     const activeTiles = getActiveTiles()
     if (activeTiles.length >= WORD_LENGTH) return
@@ -90,7 +115,7 @@ function pressKey(key) {
         nextTile.classList.remove('bounce')
     })
 }
-
+// deleta a ultima letra
 function deleteKey() {
     const activeTiles = getActiveTiles()
     const lastTile = activeTiles[activeTiles.length - 1]
@@ -99,13 +124,16 @@ function deleteKey() {
     delete lastTile.dataset.state
     delete lastTile.dataset.letter
 }
-
+// faz o check da tentativa
 function submitGuess() {
-    numberOfTries++
     
     const activeTiles = [...getActiveTiles()]
     if (activeTiles.length !== WORD_LENGTH) { 
-        showAlert('Not enough letters')
+        if(language == 'pt-br'){
+            showAlert('Letras insuficientes')
+        } else {
+            showAlert('Not enough letters')
+        }
     shakeTiles(activeTiles)    
     return }
 
@@ -115,20 +143,25 @@ function submitGuess() {
     }, "")
 
     if (!dictionary.includes(guess)) {
-        showAlert('Not in word list')
+        if(language == 'pt-br'){
+            showAlert('Palavra não existe')
+        } else {
+            showAlert('Not in word list')
+        }
         shakeTiles(activeTiles)
         return
     }
-
+    numberOfTries++
     stopInteraction()
-    activeTiles.forEach((...params) => flipTile(...params, guess));
-    
-    temp = "";
+    flips = mapTiles(guess)
+    activeTiles.forEach((...params) => flipTile(...params, guess, flips));
 }
 
 function flipTile(tile, index, array, guess) {
     const letter = tile.dataset.letter;
     const key = keyboard.querySelector(`[data-key="${letter}"i]`);
+    const status = flips.charAt(index)
+
     setTimeout(() => {
         tile.classList.add("flip");
     }, (index * FLIP_ANIMATION_DURATION) / 2);
@@ -137,21 +170,13 @@ function flipTile(tile, index, array, guess) {
         "transitionend",
         () => {
         tile.classList.remove("flip");
-        if (targetWord[index] == letter) {
-            temp += letter;
+        if (status === 'c') {
             tile.dataset.state = "correct";
             key.classList.add("correct");
         } 
-        else if (targetWord.includes(letter)) {
-            if (temp.split(letter).length < targetWord.split(letter).length) {
+        else if (status === 'p') {
             tile.dataset.state = "wrong-position";
-            key.classList.add("wrong-position");
-            temp += letter;
-            } 
-            else {
-            tile.dataset.state = "wrong";
-            key.classList.add("wrong");
-            }
+            key.classList.add("wrong-position");    
         } 
         else {
             tile.dataset.state = "wrong";
@@ -164,12 +189,48 @@ function flipTile(tile, index, array, guess) {
                 checkWinLose(guess, array)
             }, {once:true})
         }
+        
         },{ once: true }
     );
 }
+// faz um map da palavra alvo e o guess e compara aas duas retornando uma string
+function mapTiles(guess) {
+    // numero de vezes que cada letra aparece na palavra
+    let targetMap = [...targetWord].reduce((res, char) => (res[char] = (res[char] || 0) +1, res), {})
+
+    // letras na posição correta
+    let map2 = ''
+    for(i = 0; i < guess.length; i++) {
+        var c = guess.charAt(i)
+        if (c === targetWord.charAt(i)) {
+            map2 += 'c'
+            targetMap[c] -= 1
+        } else {
+            map2 += 'i'
+        }
+    }
+
+    // letras na posição incorreta
+    var map3 = ""
+    for(i = 0; i < map2.length; i++) {
+        var f = map2.charAt(i)
+        if (f === 'i') {
+            var c = guess.charAt(i)
+            if (targetMap.hasOwnProperty(c) && (targetMap[c] > 0)) {
+                targetMap[c] -=1
+                f ='p'
+            }
+        }
+        map3 += f
+    }
+        console.log(targetMap);
+        console.log(map2);
+        console.log(map3)    
+    return map3
+}
 
 function showAlert(message, duration = 1000) {
-    const alert =document.createElement('div')
+    const alert = document.createElement('div')
     alert.textContent = message
     alert.classList.add('alert')
     alertContainer.prepend(alert)
@@ -182,11 +243,11 @@ function showAlert(message, duration = 1000) {
         })
     },duration)
 }
-
+// seleciona as tiles ativas
 function getActiveTiles() {
     return guessGrid.querySelectorAll('[data-state="active"]')
 }
-
+// animação de erro
 function shakeTiles(tiles) {
     tiles.forEach(tile => {
         tile.classList.add('shake')
@@ -195,15 +256,29 @@ function shakeTiles(tiles) {
         }, {once: true})
     });
 }
-
+// checa vitória / derrota
 function checkWinLose(guess, tiles) {
     if (guess === targetWord) {
+        localStorage.setItem('numberOfGames', (numberOfGames + 1).toString())
       localStorage.setItem('numberOfVictories', (numberOfVictories + 1).toString())
       danceTiles(tiles)
       setTimeout(() => {
-          modals[4].showModal()
-          modals[4].classList.add('modal-open')
-          tries.textContent = `You guessed the word in ${numberOfTries} tries`
+        modals[4].showModal()
+        modals[4].classList.add('modal-open')
+        if(language == 'pt-br'){
+            if (numberOfTries == 1){
+                tries.textContent = `Você acertou a palavra em ${numberOfTries} tentativa`
+            } else {
+                tries.textContent = `Você acertou a palavra em ${numberOfTries} tentativas`
+            }
+        } else {
+            if (numberOfTries == 1) {
+                tries.textContent = `You guessed the word in ${numberOfTries} try`
+            } else {
+                tries.textContent = `You guessed the word in ${numberOfTries} tries`
+            }
+        }
+          
         }, 500) 
         stopInteraction()
         return
@@ -212,15 +287,16 @@ function checkWinLose(guess, tiles) {
     const remainingTiles = guessGrid.querySelectorAll('.tile:not([data-letter])')
     
     if (remainingTiles.length === 0) {
+        localStorage.setItem('numberOfGames', (numberOfGames + 1).toString())
       shakeTiles(guessGrid.querySelectorAll('.tile'))
       modals[3].showModal()
       modals[3].classList.add('modal-open')
-      answer.innerHTML = `The word was: ${targetWord.toUpperCase()}`
+      
       localStorage.setItem('numberOfFails', (numberOfFails + 1).toString())
       stopInteraction()
     }
 }
-
+// animação de vitória
 function danceTiles(tiles) {
     tiles.forEach((tile, index) => {
         setTimeout(() => {
@@ -280,13 +356,13 @@ let darkMode = localStorage.getItem('darkMode')
 const darkModeToggle = document.querySelector('#dark-mode-toggle')
 
 function enableDarkMode() {
-    darkModeToggle.setAttribute('data-dark-mode', 'enabled')
+    darkModeToggle.setAttribute('data-function', 'enabled')
     document.body.setAttribute('data-dark-mode', 'enabled')
     localStorage.setItem('darkMode', 'enabled')
 }
 
 function disableDarkMode() {
-    darkModeToggle.setAttribute('data-dark-mode', 'disabled')
+    darkModeToggle.setAttribute('data-function', 'disabled')
     document.body.setAttribute('data-dark-mode', 'disabled')
     localStorage.setItem('darkMode', 'disabled')
 }
@@ -316,10 +392,10 @@ const giveUp = document.querySelector('[data-give-up]')
 const answer = document.querySelector('[data-answer]')
 
 giveUp.addEventListener('click', () => {
+    localStorage.setItem('numberOfGames', (numberOfGames + 1).toString())
     localStorage.setItem('numberOfFails', (numberOfFails + 1).toString())
     modals[3].showModal()
     modals[3].classList.add('modal-open')
-    answer.innerHTML = `The word was: ${targetWord.toUpperCase()}`
 })
 
 // Restart
@@ -333,8 +409,5 @@ restart.forEach(button => {
     
 // Stats
 
-const stats = document.querySelectorAll('[data-stats]')
 
-stats[0].innerHTML = `<p>Games Played: <span class="total-games">${numberOfGames}</span></p>`
-stats[1].innerHTML = `<p>Correct Guesses: <span class="number-victories">${numberOfVictories}</span></p>`
-stats[2].innerHTML = `<p>Number of Losses: <span class="number-losses">${numberOfFails}</span></p>`
+
