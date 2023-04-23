@@ -111,7 +111,7 @@ function langPtBr() {
 
     helpText.innerHTML = 
     `<h2 class="modal-title">Como Jogar</h2>
-    <p>Você tem 6 tentativas para acetar a palavra</p>
+    <p>Você tem 6 tentativas para acertar a palavra</p>
     <p>Depois de cada tentativa as cores te darão uma dica</p>
     <p>Exemplo:</p>
     <div class="exemple
